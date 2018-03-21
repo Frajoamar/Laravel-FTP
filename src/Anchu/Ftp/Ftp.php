@@ -237,6 +237,30 @@ class Ftp {
     }
 
     /**
+     * Upload a stream
+     *
+     * @param $dataToStream
+     * @param $fileTo
+     * @param $mode
+     * @return bool
+     */
+    public function uploadStream($dataToStream, $fileTo, $mode = FTP_BINARY)
+    {
+        try {
+            $stream = tmpfile();
+            fwrite($stream, $dataToStream);
+            rewind($stream);
+
+            if(ftp_fput($this->connectionId, $fileTo, $stream, $mode))
+                return true;
+            else
+                return false;
+        } catch(\Exception $e) {
+            return false;
+        }
+    }
+
+    /**
      * Download a file
      *
      * @param $fileFrom
